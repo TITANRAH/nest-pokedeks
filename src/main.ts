@@ -10,9 +10,16 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true, // esto es que si espero 2 propiedades definidasa por un dto y me mandan mas , las filtray toma las
         // que corresponden y ya
-      forbidNonWhitelisted: true // pero al poner esto si me mandan mas propiedades de las que espero devuelve un error
+      forbidNonWhitelisted: true, // pero al poner esto si me mandan mas propiedades de las que espero devuelve un error
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     })
   )
-  await app.listen(3000);
+  await app.listen(process.env.PORT);
+
+  console.log(`Application is running on PORT: ${process.env.PORT}`);
+  
 }
 bootstrap();

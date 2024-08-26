@@ -9,15 +9,23 @@ import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { isValidObjectId, Model } from 'mongoose';
 import { Pokemon } from './entities/pokemon.entity';
 import { InjectModel } from '@nestjs/mongoose';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PokemonService {
+
+  private defaultLimit: number;
   constructor(
     // para poder insertar en la bd debo instanciar la forma y asi es la forma
     // // inyectando el modelo, usando este decorador y aplicandolo en el cosntructor de este servicio
     @InjectModel(Pokemon.name)
     private readonly pokemonModel: Model<Pokemon>,
-  ) {}
+    private readonly configService: ConfigService,
+  ) {
+
+    this.defaultLimit = this.configService.get<number>('defaultLimit');
+  }
 
   async create(createPokemonDto: CreatePokemonDto) {
     createPokemonDto.name = createPokemonDto.name.toLocaleLowerCase();
@@ -41,8 +49,12 @@ export class PokemonService {
     }
   }
 
-  findAll() {
-    const pokemons = this.pokemonModel.find();
+  findAll(paginationDto: PaginationDto) {
+
+    const { limit = this.defaultLimit, offset = 0 } = paginationDto;
+    
+    // busco todos los pokemones y los limito y los salto y los ordeno por numero de pokemon y no muestro la version
+    const pokemons = this.pokemonModel.find().limit(limit).skip(offset).sort({ no: 1 }).select('-__v');
     return pokemons;
   }
 
@@ -133,4 +145,14 @@ export class PokemonService {
       };
     }
   }
+
+  async deleteAll() {
+    await this.pokemonModel.deleteMany({});
+  }
+
+  async insertMany(pokemons: CreatePokemonDto[]) {
+    await this.pokemonModel.insertMany(pokemons);
+  }
 }
+
+

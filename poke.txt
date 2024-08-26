@@ -30,3 +30,70 @@ nest g pi common/pipes/parseMongoId
 esto transformara la data que retorna por ejem si en el value que retorna el pipe le pongo .toUpperCase()
 
 usaremos axios npm i axios
+
+
+para variables de entorno npm i @nestjs/config
+
+y en el appmodule si o si arrriba de todos esto  ConfigModule.forRoot(),
+
+
+me cree un archivo de configuracion  de variables de entorno 
+
+y lo llame en appmodule en  ConfigModule.forRoot({
+      load: [EnvConfiguration]
+    }),
+
+
+luego en cualquier modulo en este caso de pokemonnodule en los imports   imports: [
+    ConfigModule,
+
+traigo esto de nest 
+
+para poder ineyctar el servicio en el pokemon services ,
+
+ademas creo una variable privada y le asigno el environment que corresponde en las llaves del constructor
+
+export class PokemonService {
+
+  private defaultLimit: number;
+  constructor(
+    // para poder insertar en la bd debo instanciar la forma y asi es la forma
+    // // inyectando el modelo, usando este decorador y aplicandolo en el cosntructor de este servicio
+    @InjectModel(Pokemon.name)
+    private readonly pokemonModel: Model<Pokemon>,
+    private readonly configService: ConfigService,
+  ) {
+
+    this.defaultLimit = this.configService.get<number>('defaultLimit');
+  }
+
+
+con esto valdiare las varibales de entorno 
+
+ npm i joi
+
+
+ creo el archivo al lado del config y valido 
+
+ import * as Joi from 'joi';
+
+export const JoiValidationSchema = Joi.object({
+    MONGODB: Joi.required(),
+    PORT: Joi.number().default(3005),
+    DEFAULT_LIMIT: Joi.number().default(6),
+})
+
+luego el app module
+
+agrego esta propiedad y el valor delarchivo de valdiaciones ConfigModule.forRoot({
+      load: [EnvConfiguration],
+      validationSchema: JoiValidationSchema,
+    }),
+puedo agregar el dbname de la cadena de conecion en el appmodule en 
+
+    MongooseModule.forRoot(process.env.MONGODB, {dbName: 'next-pokemon'}),
+
+quedando mi variable de entorno asi 
+
+MONGODB=mongodb+srv://granrah1:LeM5yoEWTAoT7EQI@cluster0.819kt.mongodb.net sin la bd al final 
+
