@@ -1,0 +1,30 @@
+para servi contenido estatico como una pagina
+
+npm i @nestjs/serve-static
+
+poniendo esto en mi appmodule puedo mostrar 
+
+el sitio web statico 
+@Module({
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
+  ],
+
+})
+export class AppModule {}
+
+para instalar mongoose npm i @nestjs/mongoose mongoose
+
+
+para crear un propio pipe hay que crear un modulo comun y se llamara common
+
+nest g mo common
+
+
+luego crearemos un pipe dentro de la carpetagneradada 
+
+nest g pi common/pipes/parseMongoId
+
+esto transformara la data que retorna por ejem si en el value que retorna el pipe le pongo .toUpperCase()
