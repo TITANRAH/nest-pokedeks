@@ -28,3 +28,5 @@ luego crearemos un pipe dentro de la carpetagneradada
 nest g pi common/pipes/parseMongoId
 
 esto transformara la data que retorna por ejem si en el value que retorna el pipe le pongo .toUpperCase()
+
+usaremos axios npm i axios

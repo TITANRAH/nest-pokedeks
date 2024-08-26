@@ -4,6 +4,7 @@ import { join } from 'path';
 import { PokemonModule } from './pokemon/pokemon.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CommonModule } from './common/common.module';
+import { SeedModule } from './seed/seed.module';
 
 
 @Module({
@@ -14,6 +15,7 @@ import { CommonModule } from './common/common.module';
     MongooseModule.forRoot('mongodb+srv://granrah1:LeM5yoEWTAoT7EQI@cluster0.819kt.mongodb.net/next-pokemon'),
     PokemonModule,
     CommonModule,
+    SeedModule,
   ],
 
 })
